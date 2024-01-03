@@ -1,5 +1,5 @@
 //import{cart as myCart} from '../data/cart' ; 
-import {cart} from '../data/cart.js';
+import {cart,addToCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 
 let productsHTML = ''; 
@@ -64,66 +64,26 @@ products.forEach((product) => {
 document.querySelector('.js-products-grid').innerHTML = productsHTML
 
 
+  function updateCartQuantity()
+  {
+      let cartQuantity = 0;
+
+        cart.forEach((cartItem) => {
+          cartQuantity += cartItem.quantity;
+        })
+
+        document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+    }
+
 const addedMessageTimeouts = {}
 
 document.querySelectorAll('.js-add-to-cart')
   .forEach((button) =>{
       button.addEventListener('click', () => {
-         const {productId} = button.dataset
+         const {productId} = button.dataset;
 
-        const productQuantity = Number(document.querySelector(`.js-quantity-selector-${productId}`).value )
-
-        let matchingItem;
-
-         cart.forEach((item) => {
-          if(productId === item.productId)
-          {
-            matchingItem = item
-          }
-
-         })
-
-         if (matchingItem) //IF object is present then true or else false .
-         {
-          matchingItem.quantity += productQuantity 
-          }
-         else 
-          {
-            cart.push({
-            productId,
-            quantity:productQuantity
-            });
-           }
-        
-
-        //This is my solution 
-        // let b = false
-        // cart.forEach((item) => {
-        //     if(productId === item.productId)
-        //     {
-        //       item.quantity +=1
-        //       b = true
-        //     }
-           
-        //   })
-
-        //    if (!b) {
-
-        //     cart.push({
-        //           productId : productId,
-        //           quantity:1
-        //           });
-        //    }
-
-
-        let cartQuantity = 0 
-
-        cart.forEach((item) => {
-
-          cartQuantity += item.quantity
-        })
-
-        document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
+        addToCart(productId);
+        updateCartQuantity();
 
         const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`)
 
@@ -144,9 +104,6 @@ document.querySelectorAll('.js-add-to-cart')
         addedMessageTimeouts[productId] = timeoutId
         
       })
-
        
-        
-         
       });
   });

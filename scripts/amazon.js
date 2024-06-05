@@ -1,7 +1,9 @@
 //import{cart as myCart} from '../data/cart' ; 
-import {cart,addToCart} from '../data/cart.js';
+import {calculateCartQuantity,cart,addToCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
+
+document.querySelector('.js-cart-quantity').innerHTML = calculateCartQuantity(); //so that whenever the page reloads it will first update the cart quantity . 
 
 let productsHTML = ''; 
 
@@ -9,7 +11,7 @@ products.forEach((product) => {
   productsHTML += ` 
     <div class="product-container">
       <div class="product-image-container">
-        <img class="product-image"
+        <img class="product-image"  
           src="${product.image}">
       </div>
 
@@ -65,16 +67,7 @@ products.forEach((product) => {
 document.querySelector('.js-products-grid').innerHTML = productsHTML
 
 
-  function updateCartQuantity()
-  {
-      let cartQuantity = 0;
-
-        cart.forEach((cartItem) => {
-          cartQuantity += cartItem.quantity;
-        })
-
-        document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
-    }
+document.querySelector('.js-cart-quantity').innerHTML = calculateCartQuantity();
 
 const addedMessageTimeouts = {}
 
@@ -84,7 +77,8 @@ document.querySelectorAll('.js-add-to-cart')
          const {productId} = button.dataset;
 
         addToCart(productId);
-        updateCartQuantity();
+      
+        document.querySelector('.js-cart-quantity').innerHTML = calculateCartQuantity();
 
         const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`)
 
